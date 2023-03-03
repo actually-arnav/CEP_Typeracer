@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+
+@font-face {
+  font-family: 'Anonymous Pro B';
+  src: url(fonts/Anonymous\ Pro\ B.ttf) format('truetype');
+}
+
+body {
+  font-family: 'Anonymous Pro B', sans-serif;
+}
+
+#editable {
+  border: 1px solid black;
+  height: 100px;
+  width: 300px;
+  padding: 10px;
+}

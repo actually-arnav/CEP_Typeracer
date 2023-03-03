@@ -1,25 +1,82 @@
-import logo from './logo.svg';
 import './App.css';
+import Typing from './Typing.js';
+import Typing2 from './Typing2.js';
+import Typing3 from './Typing3.js';
+
+// config to connect to firebase
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBoFv8NLpdCrsMvYPbhlJXP4_NMMaFYm0U",
+  authDomain: "typeracer-no-fail.firebaseapp.com",
+  projectId: "typeracer-no-fail",
+  storageBucket: "typeracer-no-fail.appspot.com",
+  messagingSenderId: "1021740562247",
+  appId: "1:1021740562247:web:699ac17a10f8b488c2fe62",
+  measurementId: "G-J8Y0PTG2YS"
+};
+
+firebase.initializeApp({
+  apiKey: "AIzaSyBoFv8NLpdCrsMvYPbhlJXP4_NMMaFYm0U",
+  authDomain: "typeracer-no-fail.firebaseapp.com",
+  projectId: "typeracer-no-fail",
+  storageBucket: "typeracer-no-fail.appspot.com",
+  messagingSenderId: "1021740562247",
+  appId: "1:1021740562247:web:699ac17a10f8b488c2fe62",
+  measurementId: "G-J8Y0PTG2YS"
+})
+
+const auth = firebase.auth();
+const firestore = firebase.firestore();
+
+
+const app = initializeApp(firebaseConfig);
 
 function App() {
+  const [user] = useAuthState(auth);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header className="App-header" style={{ backgroundColor: "orange" }}>
+        {user ? (
+          <div>
+            <Typing3 />
+            <div style={{ height: 20 }} />
+            <SignOut />
+          </div>
+        ) : (
+          <SignIn />
+        )}
       </header>
     </div>
   );
+}
+
+
+function SignIn() {
+
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider);
+  }
+
+  return (
+    <>
+      <button className="btn btn-primary btn-block" onClick={signInWithGoogle}>Sign in with Google</button>
+    </>
+  )
+
+}
+
+function SignOut() {
+  return auth.currentUser && (
+    <button className="btn btn-secondary btn-block" onClick={() => auth.signOut()}>Sign Out</button>
+  )
 }
 
 export default App;
