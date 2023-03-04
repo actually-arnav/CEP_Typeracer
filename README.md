@@ -1,9 +1,9 @@
 # Deployment
 
-`npm run build`
-`firebase init` 
+`npm run build`\
+`firebase init`
 - set the first option to 'build' instead of 'public'
-- do NOT overwrite `index.html`
+- do NOT overwrite `index.html`\
 `firebase deploy`
 
 
