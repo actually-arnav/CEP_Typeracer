@@ -38,27 +38,33 @@ const WPM = () => {
   };
 
   useEffect(() => {
-    if (hasMounted) {
+    if (getText) {
       fetchData();
     }
   }, [getText]);
+  
+  useEffect(() => {
+    if (getText) {
+      let splitted = toType.split(' ');
+      setSplitToType(splitted);
+      setDisplayText(splitted.slice());
+      setGetText(false);
+    }
+  }, [toType]);
 
   useEffect(() => {
     if (hasMounted) {
-      let splitted = toType.split(' ');
-      setSplitToType(splitted);
+      console.log('no', displayText);
       setShowText(true);
-    } else {
-      setHasMounted(true);
     }
-  }, [toType]);
+  }, [displayText]);
 
 
   const handleTextChange = (e) => {
     let value = e.target.value;
     let splitted = value.split(' ');
     let reset = false;
-    for (let i=splitted.length-2; i>=0; i--) {
+    for (let i = splitted.length - 2; i >= 0; i--) {
       if (splitted[i] === '') {
         splitted.splice(i, 1);
         reset = true;
@@ -66,9 +72,9 @@ const WPM = () => {
     }
     if (reset) {
       value = '';
-      for (let i=0, n=splitted.length; i<n; i++) {
+      for (let i = 0, n = splitted.length; i < n; i++) {
         value += splitted[i];
-        if (i !== n-1) {
+        if (i !== n - 1) {
           value += ' ';
         }
       }
@@ -81,28 +87,32 @@ const WPM = () => {
     if (isRunning === 0) {
       resetTimer();
       startTimer();
-      //console.log(splitToType, toType);
     }
   };
 
   useEffect(() => {
     if (isRunning === 1 && splitToType !== null) {
-      if (splitTyped.length > splitToType.length || splitToType[splitToType.length-1] === splitTyped[splitTyped.length-1]) {
+      if (splitTyped.length > splitToType.length || splitToType[splitToType.length - 1] === splitTyped[splitTyped.length - 1]) {
         stopTimer();
       }
     }
   }, [splitTyped, splitToType]);
 
   useEffect(() => {
-    checkWords();
+    if (hasMounted) {
+      checkWords();
+    } else {
+      setHasMounted(true);
+    }
   }, [splitTyped]);
 
   const checkWords = useCallback(() => {
     let colours = [];
     let wrongs = 0;
+    let toDisplay = displayText;
+
     for (let i = 0, n = splitTyped.length; i < n; i++) {
       let colour = [];
-      let wrong = false;
 
       for (let j = 0, m = splitTyped[i].length; j < m; j++) {
         let c = 'red';
@@ -111,19 +121,26 @@ const WPM = () => {
           if (j < splitToType[i].length) {
             if (splitToType[i][j] === splitTyped[i][j]) {
               c = 'green';
-            } else {
-              wrong = true;
             }
           } else {
-            //MIGHT-DO: add to display text?
+            if (j >= displayText[i].length) {
+              toDisplay[i] += splitTyped[i][j];
+              console.log(displayText, splitTyped, splitToType);
+            }
           }
         }
 
         colour.push(c);
       }
-      if (wrong) wrongs++;
+
+      if (splitToType[i] !== splitTyped[i]) {
+        if (i < splitToType.length) {
+          wrongs++;
+        }
+      }
       colours.push(colour);
     }
+
     setColourList(colours);
     setWrongWords(wrongs);
   }, [splitToType, splitTyped]);
@@ -133,6 +150,8 @@ const WPM = () => {
     if (i < colourList.length) {
       if (j < colourList[i].length) {
         return { color: colourList[i][j] };
+      } else if (i !== colourList.length - 1) {
+        return { color: 'red' };
       }
     }
     return { color: 'white' };
@@ -144,6 +163,7 @@ const WPM = () => {
     if (isRunning === 1) {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 10);
+        //console.log(displayText);
       }, 10);
     }
     return () => clearInterval(interval);
@@ -209,7 +229,7 @@ const WPM = () => {
             {/* text */}
             <p>
               Text:{' '}
-              {splitToType.map((word, i) => (
+              {displayText.map((word, i) => (
                 <span key={i}>
                   {word.split('').map((char, j) => (
                     <span key={j} style={matchColour(i, j)}>
@@ -253,14 +273,14 @@ const WPM = () => {
       </div>
 
       {isRunning === 2 ? (
-      <div>
-        <h1 style={{ padding: '15px 0 0 0' }}>
-          wpm: {wpm}
-        </h1>
-        <h1 style={{ padding: '15px 0 15px 0' }}>
-          wrong words: {wrongWords}
-        </h1>
-      </div>
+        <div>
+          <h1 style={{ padding: '15px 0 0 0' }}>
+            wpm: {wpm}
+          </h1>
+          <h1 style={{ padding: '15px 0 15px 0' }}>
+            wrong words: {wrongWords}
+          </h1>
+        </div>
       ) : (
         ''
       )}
