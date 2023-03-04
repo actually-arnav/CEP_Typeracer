@@ -1,3 +1,13 @@
+# Deployment
+
+`npm run build`
+`firebase init` 
+- set the first option to 'build' instead of 'public'
+- do NOT overwrite `index.html`
+`firebase deploy`
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

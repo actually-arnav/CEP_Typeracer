@@ -5,8 +5,10 @@ import './Typing.css'; // import css
 const WPM = () => {
   const [time, setTime] = useState(0);
 
+  const [hasMounted, setHasMounted] = useState(false);
   const [getText, setGetText] = useState(false);
   const [showText, setShowText] = useState(false);
+
   const [toType, setToType] = useState('');
   const [splitToType, setSplitToType] = useState(null);
 
@@ -24,10 +26,9 @@ const WPM = () => {
 
   const genText = () => {
     setGetText(true);
-    console.log('ugh');
   }
 
-  const fetchData = () => {
+  const fetchData = async () => {
     /*
     const response = await fetch('/path/to/db');
     const data = await response.json();
@@ -37,15 +38,19 @@ const WPM = () => {
   };
 
   useEffect(() => {
-    fetchData();
-    console.log('hello there!');
+    if (hasMounted) {
+      fetchData();
+    }
   }, [getText]);
 
   useEffect(() => {
-    console.log('morning');
-    let splitted = toType.split(' ');
-    setSplitToType(splitted);
-    setShowText(true);
+    if (hasMounted) {
+      let splitted = toType.split(' ');
+      setSplitToType(splitted);
+      setShowText(true);
+    } else {
+      setHasMounted(true);
+    }
   }, [toType]);
 
 
@@ -250,10 +255,10 @@ const WPM = () => {
       {isRunning === 2 ? (
       <div>
         <h1 style={{ padding: '15px 0 0 0' }}>
-          {wpm}
+          wpm: {wpm}
         </h1>
         <h1 style={{ padding: '15px 0 15px 0' }}>
-          {wrongWords}
+          wrong words: {wrongWords}
         </h1>
       </div>
       ) : (
