@@ -67,7 +67,7 @@ function SignIn() {
 
   return (
     <>
-      <button className="btn btn-primary btn-block" style={{ borderRadius: '15px' }} onClick={signInWithGoogle}>Sign in with Google</button>
+      <button className="btn btn-primary btn-block" style={{ borderRadius: '15px', fontSize: '25px' }} onClick={signInWithGoogle}>Sign in with Google</button>
     </>
   )
 
