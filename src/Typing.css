@@ -9,6 +9,22 @@ body {
   font-family: 'Anonymous Pro B', sans-serif;
 }
 
+p {
+  background-color: #ffb300;
+  border-radius: 15px;
+  box-shadow: 7px 7px #d29300;
+}
+
+button {
+  box-shadow: 7px 7px #6e757c69;
+  text-shadow: 0 0 5px #0000006a;
+}
+
+* {
+  color: black;
+  text-shadow: 0 0 5px #0000006a;
+}
+
 #editable {
   border: 1px solid black;
   height: 100px;

@@ -42,11 +42,11 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header" style={{ backgroundColor: "orange" }}>
+      <header className="App-header" style={{ backgroundColor: "#ffce47", borderRadius: '0' }}>
         {user ? (
           <div>
             <Typing3 />
-            <div style={{ height: 20 }} />
+            <div style={{ height: 50 }} />
             <SignOut />
           </div>
         ) : (
@@ -67,7 +67,7 @@ function SignIn() {
 
   return (
     <>
-      <button className="btn btn-primary btn-block" onClick={signInWithGoogle}>Sign in with Google</button>
+      <button className="btn btn-primary btn-block" style={{ borderRadius: '15px' }} onClick={signInWithGoogle}>Sign in with Google</button>
     </>
   )
 
@@ -75,7 +75,7 @@ function SignIn() {
 
 function SignOut() {
   return auth.currentUser && (
-    <button className="btn btn-secondary btn-block" onClick={() => auth.signOut()}>Sign Out</button>
+    <button className="btn btn-secondary btn-block" style={{ borderRadius: '15px' }} onClick={() => auth.signOut()}>Sign Out</button>
   )
 }
 

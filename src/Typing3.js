@@ -5,6 +5,8 @@ import './Typing.css'; // import css
 const WPM = () => {
   const [time, setTime] = useState(0);
 
+  const [reset, setReset] = useState(false);
+
   const [hasMounted, setHasMounted] = useState(false);
   const [getText, setGetText] = useState(false);
   const [showText, setShowText] = useState(false);
@@ -24,8 +26,26 @@ const WPM = () => {
   const [colourList, setColourList] = useState([]);
 
 
+  const close = () => {
+    setReset(true);
+  };
+
+  useEffect(() => {
+    if (reset) {
+      setShowText(false);
+      document.getElementById('texteh').value = '';
+      setTime(0);
+      setToType('');
+      setTyped('');
+      setSplitToType(['']);
+      setColourList([]);
+      setIsRunning(0);
+    }
+  }, [reset]);
+
   const genText = () => {
     setGetText(true);
+    setReset(false);
   }
 
   const fetchData = async () => {
@@ -34,7 +54,7 @@ const WPM = () => {
     const data = await response.json();
     let textUwU = data.toType;
     */
-    setToType('good morning children');
+    setToType('good morning children owo');
   };
 
   useEffect(() => {
@@ -42,19 +62,19 @@ const WPM = () => {
       fetchData();
     }
   }, [getText]);
-  
+
   useEffect(() => {
     if (getText) {
       let splitted = toType.split(' ');
       setSplitToType(splitted);
       setDisplayText(splitted.slice());
-      setGetText(false);
     }
   }, [toType]);
 
   useEffect(() => {
-    if (hasMounted) {
+    if (getText) {
       console.log('no', displayText);
+      setGetText(false);
       setShowText(true);
     }
   }, [displayText]);
@@ -109,24 +129,25 @@ const WPM = () => {
   const checkWords = useCallback(() => {
     let colours = [];
     let wrongs = 0;
-    let toDisplay = displayText;
+    let toDisplay = splitToType.slice();
 
     for (let i = 0, n = splitTyped.length; i < n; i++) {
       let colour = [];
 
       for (let j = 0, m = splitTyped[i].length; j < m; j++) {
-        let c = 'red';
+        let c = '#9a322e';
 
         if (i < splitToType.length) {
           if (j < splitToType[i].length) {
             if (splitToType[i][j] === splitTyped[i][j]) {
-              c = 'green';
+              c = '#26734d';
             }
           } else {
-            if (j >= displayText[i].length) {
-              toDisplay[i] += splitTyped[i][j];
-              console.log(displayText, splitTyped, splitToType);
-            }
+            toDisplay[i] += splitTyped[i].substring(j);
+            // for (let k = j, o = splitTyped.length - 1; k < o; k++) {
+            //   colour.push('#ffffff');
+            // }
+            break;
           }
         }
 
@@ -143,6 +164,7 @@ const WPM = () => {
 
     setColourList(colours);
     setWrongWords(wrongs);
+    setDisplayText(toDisplay);
   }, [splitToType, splitTyped]);
 
 
@@ -150,11 +172,11 @@ const WPM = () => {
     if (i < colourList.length) {
       if (j < colourList[i].length) {
         return { color: colourList[i][j] };
-      } else if (i !== colourList.length - 1) {
-        return { color: 'red' };
+      } else if (i !== colourList.length - 1 && splitToType[i][j] === null) {
+        return { color: '#ffffff' };
       }
     }
-    return { color: 'white' };
+    return { color: '#2c2c2c' };
   };
 
 
@@ -183,7 +205,7 @@ const WPM = () => {
   };
 
   const calculateWPM = (elapsed) => {
-    setWpm(((splitToType.length - wrongWords) / (elapsed / 1000 / 60)).toFixed(2));
+    setWpm(((splitToType.length - wrongWords + 1) / (elapsed / 1000 / 60)).toFixed(2));
   };
 
   // document.addEventListener("DOMContentLoaded", function() {
@@ -198,13 +220,13 @@ const WPM = () => {
   // });
 
   return (
-    <div className="container" style={{ backgroundColor: "darkorange" }}>
+    <div className="container" style={{ backgroundColor: "#ffbf00", boxShadow: "25px 25px  #d49b00", padding: '25px', borderRadius: '50px' }}>
 
       {/* title */}
       <div className="row">
         <div className="col-12">
           {/* title: */}
-          <h1 className="display-1" style={{ padding: '1em 2em 15px 2em' }}>Typeracer</h1>
+          <h1 className="display-1" style={{ padding: '1em 2em 15px 2em' }}>typeracer</h1>
           <div style={{ height: 20 }} />
         </div>
       </div>
@@ -218,7 +240,7 @@ const WPM = () => {
             <button
               className="btn btn-secondary btn-block"
               onClick={genText}
-              style={{ padding: '10px 20px 10px 20px' }}
+              style={{ padding: '10px 20px 10px 20px', borderRadius: '15px' }}
             >
               Generate Text
             </button>
@@ -228,7 +250,7 @@ const WPM = () => {
 
             {/* text */}
             <p>
-              Text:{' '}
+              text:{' '}
               {displayText.map((word, i) => (
                 <span key={i}>
                   {word.split('').map((char, j) => (
@@ -246,40 +268,50 @@ const WPM = () => {
             {/* textbox */}
             <textarea
               className="form-control"
+              id='texteh'
               rows={10}
-              style={{ backgroundColor: "grey", border: "grey", resize: 'none' }}
+              style={{ backgroundColor: "grey", border: "grey", height: '10px', boxShadow: '7px 7px #505050', borderRadius: '12px' }}
               placeholder=""
               defaultValue={typed}
               onInput={handleTextChange}
             />
+
+            {/* time */}
+            <h1 style={{ padding: '20px 0 15px 0' }}>
+              time: {(time / 1000).toFixed(2)}s
+            </h1>
           </div>
         )}
       </div>
 
+
       { // <div id="editable" contentEditable="true"></div>
       }
 
-      {/* display time */}
-      <h1 style={{ padding: '15px 0 15px 0' }}>
-        {(time / 1000).toFixed(2)}s
-      </h1>
-
-      <div className="row" style={{ marginTop: '20px' }}>
+      {/* <div className="row" style={{ marginTop: '20px' }}>
         <div className="col-12">
           <p className="text-center">
             {typed}
           </p>
         </div>
-      </div>
+      </div> */}
 
       {isRunning === 2 ? (
         <div>
-          <h1 style={{ padding: '15px 0 0 0' }}>
+          <h1>
             wpm: {wpm}
           </h1>
           <h1 style={{ padding: '15px 0 15px 0' }}>
             wrong words: {wrongWords}
           </h1>
+          {/* button to reset: */}
+          <button
+            className="btn btn-secondary btn-block"
+            onClick={close}
+            style={{ padding: '10px 20px 10px 20px', borderRadius: '15px' }}
+          >
+            Close
+          </button>
         </div>
       ) : (
         ''
