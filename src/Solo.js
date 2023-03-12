@@ -24,6 +24,12 @@ const Solo = () => {
 
   const [colourList, setColourList] = useState([]);
 
+  const [mount] = useState(false);
+
+
+  useEffect(() => {
+    setIsRunning(0);  // to refresh if person clicks 'back' button and clicks solo again
+  }, [mount]);
 
   const close = () => {
     setReset(true);
@@ -196,6 +202,9 @@ const Solo = () => {
 
   const stopTimer = () => {
     setIsRunning(2);
+    document.getElementById('texteh').disabled = true;
+    document.getElementById('texteh').style.opacity = 0.5;
+    document.getElementById('texteh').style.cursor = 'default';
     calculateWPM(time);
   };
 
@@ -228,7 +237,7 @@ const Solo = () => {
 
             {/* button to generate text: */}
             <button
-              className="btn btn-secondary btn-block"
+              className="btn btn-dark btn-block"
               onClick={genText}
               style={{ padding: '10px 20px 10px 20px', borderRadius: '15px', fontSize: '25px' }}
             >
@@ -239,8 +248,7 @@ const Solo = () => {
           <div>
 
             {/* text */}
-            <p>
-              text:{' '}
+            <p style={{ padding: '15px' }}>
               {displayText.map((word, i) => (
                 <span key={i}>
                   {word.split('').map((char, j) => (
@@ -260,7 +268,7 @@ const Solo = () => {
               className="form-control"
               id='texteh'
               rows={10}
-              style={{ backgroundColor: "grey", border: "grey", height: '10px', boxShadow: '7px 7px #505050', borderRadius: '12px' }}
+              style={{ backgroundColor: "grey", border: "grey", height: '10px', boxShadow: '10px 10px #505050', borderRadius: '12px', opacity: '0.1' }}
               placeholder=""
               defaultValue={typed}
               onInput={handleTextChange}
@@ -296,13 +304,13 @@ const Solo = () => {
           </h1>
           {/* button to reset: */}
           <button
-            className="btn btn-secondary btn-block"
+            className="btn btn-dark btn-block"
             onClick={close}
             style={{ padding: '10px 20px 10px 20px', borderRadius: '15px' }}
           >
-            Close
+            Reset
           </button>
-          
+
           <div style={{ height: '20px' }}></div>
         </div>
       ) : (

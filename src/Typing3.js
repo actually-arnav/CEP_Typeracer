@@ -46,7 +46,7 @@ const WPM = () => {
         <div className='row'>
           <div>
             <button
-              className="btn btn-secondary btn-block"
+              className="btn btn-success btn-block"
               onClick={clickSolo}
               style={{ padding: '10px 20px 10px 20px', borderRadius: '15px', marginRight: '10px', fontSize: '25px' }}
             >
@@ -54,7 +54,7 @@ const WPM = () => {
             </button>
 
             <button
-              className="btn btn-secondary btn-block"
+              className="btn btn-success btn-block"
               onClick={clickBots}
               style={{ padding: '10px 20px 10px 20px', borderRadius: '15px', marginLeft: '10px', fontSize: '25px' }}
             >
@@ -65,31 +65,26 @@ const WPM = () => {
           <div style={{ height: '20px' }}></div>
         </div>
       ) : (
-        mode === 1 ? (
+        <div>
+          {mode === 1 ? (
           <div>
-            <Solo/>
-
-            <button
-              className="btn btn-secondary btn-block"
-              onClick={clickBack}
-              style={{ padding: '10px 20px 10px 20px', borderRadius: '15px', marginRight: '10px' }}
-            >
-              Back
-            </button>
+            <Solo />
           </div>
-        ) :
+          ) : (
           <div>
-            <Bots/>
-
-            <div style={{ height: '20px' }}></div>
-            <button
-              className="btn btn-secondary btn-block"
-              onClick={clickBack}
-              style={{ padding: '10px 20px 10px 20px', borderRadius: '15px', marginRight: '10px' }}
-            >
-              Back
-            </button>
+            <Bots />
           </div>
+          )}
+
+          <button
+            className="btn btn-light btn-block"
+            onClick={clickBack}
+            style={{ padding: '10px 20px 10px 20px', borderRadius: '15px' }}
+          >
+            Back
+          </button>
+
+        </div>
       )}
 
 

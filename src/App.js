@@ -75,7 +75,7 @@ function SignIn() {
 
 function SignOut() {
   return auth.currentUser && (
-    <button className="btn btn-secondary btn-block" style={{ borderRadius: '15px' }} onClick={() => auth.signOut()}>Sign Out</button>
+    <button className="btn btn-danger btn-block" style={{ borderRadius: '15px', padding: '8px 15px 8px 15px' }} onClick={() => auth.signOut()}>Sign Out</button>
   )
 }
 
