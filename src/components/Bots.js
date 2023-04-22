@@ -52,6 +52,7 @@ const Bots = () => {
   ];
 
 
+  // set bot mode
   const clickEasy = () => {
     setMode(1);
     setSpeed(220);
@@ -84,6 +85,7 @@ const Bots = () => {
     setReset(true);
   };
 
+  // reset game if reset button is clicked
   useEffect(() => {
     if (reset) {
       setShowText(false);
@@ -99,7 +101,7 @@ const Bots = () => {
     }
   }, [reset]);
 
-
+  // text generation
   const genText = () => {
     setGetText(true);
     setReset(false);
@@ -118,19 +120,19 @@ const Bots = () => {
 
   useEffect(() => {
     if (getText) {
+      setGetText(false);
+      setShowText(true);
+    }
+  }, [displayText]);
+
+  // text comparison logic
+  useEffect(() => {
+    if (getText) {
       let splitted = toType.split(' ');
       setSplitToType(splitted);
       setDisplayText(splitted.slice());
     }
   }, [toType]);
-
-  useEffect(() => {
-    if (getText) {
-      console.log('no', displayText);
-      setGetText(false);
-      setShowText(true);
-    }
-  }, [displayText]);
 
 
   const handleTextChange = (e) => {
@@ -162,15 +164,6 @@ const Bots = () => {
       startTimer();
     }
   };
-
-  useEffect(() => {
-    if (isRunning === 1 && splitToType !== null) {
-      if (splitTyped.length > splitToType.length || splitToType[splitToType.length - 1] === splitTyped[splitTyped.length - 1]) {
-        setWin(true);
-        stopTimer();
-      }
-    }
-  }, [splitTyped, splitToType]);
 
   useEffect(() => {
     if (hasMounted) {
@@ -221,7 +214,7 @@ const Bots = () => {
     setDisplayText(toDisplay);
   }, [splitToType, splitTyped]);
 
-
+  // colour for text after comparison
   const matchColour = (i, j) => {
     if (i < colourList.length) {
       if (j < colourList[i].length) {
@@ -233,7 +226,25 @@ const Bots = () => {
     return { color: '#2c2c2c' };
   };
 
+  // bot colour matching
+  const matchColourBot = (i) => {
+    if (i < botColourList.length) {
+      return { color: botColourList[i] };
+    }
+    return { color: '#2c2c2c' };
+  };
 
+  // stop game when stopping conditions are met
+  useEffect(() => {
+    if (isRunning === 1 && splitToType !== null) {
+      if (splitTyped.length > splitToType.length || splitToType[splitToType.length - 1] === splitTyped[splitTyped.length - 1]) {
+        setWin(true);
+        stopTimer();
+      }
+    }
+  }, [splitTyped, splitToType]);
+
+  // timer
   useEffect(() => {
     let interval;
     if (isRunning === 1) {
@@ -264,14 +275,7 @@ const Bots = () => {
     setWpm(((splitToType.length - wrongWords + 1) / (elapsed / 1000 / 60)).toFixed(2));
   };
 
-
-  const matchColourBot = (i) => {
-    if (i < botColourList.length) {
-      return { color: botColourList[i] };
-    }
-    return { color: '#2c2c2c' };
-  };
-
+  // handle bot mode
   useEffect(() => {
     if (mode != 0) {
       let interval;
@@ -293,6 +297,7 @@ const Bots = () => {
 
   return (
     <div className="container">
+      {/* bot level buttons */}
       {showButtons ? (
         <div>
           <button
@@ -340,7 +345,7 @@ const Bots = () => {
               </div>
             ) : (
               <div>
-
+                {/* bot text */}
                 <p style={{ padding: '15px', backgroundColor: '#ffc53e' }}>
                   🤖:{' '}
                   {toType.slice().split('').map((char, i) => (
@@ -386,6 +391,7 @@ const Bots = () => {
             )}
           </div>
 
+          {/* Stats + Reset Button */}
           {isRunning === 2 ? (
             <div>
               <h1>

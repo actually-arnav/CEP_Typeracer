@@ -7,6 +7,7 @@ const Homepage = () => {
   const [showButtons, setShowButtons] = useState(true);
   const [mode, setMode] = useState(0);
 
+  // choose game mode
   const clickSolo = () => {
     setMode(1);
   };
@@ -41,6 +42,7 @@ const Homepage = () => {
         </div>
       </div>
 
+      {/* game mode buttons */}
       {showButtons ? (
         <div className='row'>
           <div>

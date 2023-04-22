@@ -5,11 +5,11 @@ import './Typing.css'; // import css
 // config to connect to firebase
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { initializeApp } from "firebase/app";
 
+// firebase setup
 const firebaseConfig = {
   apiKey: "AIzaSyBoFv8NLpdCrsMvYPbhlJXP4_NMMaFYm0U",
   authDomain: "typeracer-no-fail.firebaseapp.com",
@@ -31,8 +31,6 @@ firebase.initializeApp({
 })
 
 const auth = firebase.auth();
-const firestore = firebase.firestore();
-
 
 const app = initializeApp(firebaseConfig);
 
@@ -42,6 +40,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header" style={{ backgroundColor: "#ffce47", borderRadius: '0' }}>
+        {/* .display(logged in ? homepage + sign-out button : sign-in button) */}
         {user ? (
           <div>
             <Homepage />

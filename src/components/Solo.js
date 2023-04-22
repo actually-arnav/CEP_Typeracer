@@ -53,6 +53,7 @@ const Solo = () => {
     setReset(true);
   };
 
+  // reset game if reset button is clicked
   useEffect(() => {
     if (reset) {
       setShowText(false);
@@ -66,6 +67,7 @@ const Solo = () => {
     }
   }, [reset]);
 
+  // text generation
   const genText = () => {
     setGetText(true);
     setReset(false);
@@ -84,20 +86,19 @@ const Solo = () => {
 
   useEffect(() => {
     if (getText) {
-      let splitted = toType.split(' ');
-      setSplitToType(splitted);
-      setDisplayText(splitted.slice());
-    }
-  }, [toType]);
-
-  useEffect(() => {
-    if (getText) {
-      console.log('no', displayText);
       setGetText(false);
       setShowText(true);
     }
   }, [displayText]);
 
+  // text comparison logic
+  useEffect(() => {
+    if (getText) {
+      let splitted = toType.split(' ');
+      setSplitToType(splitted);
+      setDisplayText(splitted.slice());
+    }
+  }, [toType]);
 
   const handleTextChange = (e) => {
     let value = e.target.value;
@@ -128,14 +129,6 @@ const Solo = () => {
       startTimer();
     }
   };
-
-  useEffect(() => {
-    if (isRunning === 1 && splitToType !== null) {
-      if (splitTyped.length > splitToType.length || splitToType[splitToType.length - 1] === splitTyped[splitTyped.length - 1]) {
-        stopTimer();
-      }
-    }
-  }, [splitTyped, splitToType]);
 
   useEffect(() => {
     if (hasMounted) {
@@ -186,7 +179,7 @@ const Solo = () => {
     setDisplayText(toDisplay);
   }, [splitToType, splitTyped]);
 
-
+  // colour for text after comparison
   const matchColour = (i, j) => {
     if (i < colourList.length) {
       if (j < colourList[i].length) {
@@ -198,7 +191,16 @@ const Solo = () => {
     return { color: '#2c2c2c' };
   };
 
+  // stop game when stopping conditions are met
+  useEffect(() => {
+    if (isRunning === 1 && splitToType !== null) {
+      if (splitTyped.length > splitToType.length || splitToType[splitToType.length - 1] === splitTyped[splitTyped.length - 1]) {
+        stopTimer();
+      }
+    }
+  }, [splitTyped, splitToType]);
 
+  // timer
   useEffect(() => {
     let interval;
     if (isRunning === 1) {
@@ -229,17 +231,6 @@ const Solo = () => {
   const calculateWPM = (elapsed) => {
     setWpm(((splitToType.length - wrongWords + 1) / (elapsed / 1000 / 60)).toFixed(2));
   };
-
-  // document.addEventListener("DOMContentLoaded", function() {
-  //   const editableDiv = document.getElementById('editable');
-  //   editableDiv.innerHTML = "Type your text here.";
-
-  //   editableDiv.addEventListener('input', function() {
-  //     const text = editableDiv.innerText;
-  //     setTyped(text);
-  //     console.log(typed);
-  //   });
-  // });
 
   return (
     <div className="container">
@@ -275,8 +266,6 @@ const Solo = () => {
               ))}
             </p>
 
-            {/* <p style={{ padding: '0 0 10px 0' }}>{toType}</p> */}
-
             {/* textbox */}
             <textarea
               className="form-control"
@@ -296,17 +285,7 @@ const Solo = () => {
         )}
       </div>
 
-      { // <div id="editable" contentEditable="true"></div>
-      }
-
-      {/* <div className="row" style={{ marginTop: '20px' }}>
-        <div className="col-12">
-          <p className="text-center">
-            {typed}
-          </p>
-        </div>
-      </div> */}
-
+      {/* Stats + Reset Button */}
       {isRunning === 2 ? (
         <div>
           <h1>
