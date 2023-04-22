@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // import bootstrap
-import './Typing.css'; // import css
 import Solo from './Solo.js';
 import Bots from './Bots.js';
 
-const WPM = () => {
+const Homepage = () => {
   const [showButtons, setShowButtons] = useState(true);
   const [mode, setMode] = useState(0);
 
@@ -92,4 +91,4 @@ const WPM = () => {
   );
 };
 
-export default WPM;
+export default Homepage;

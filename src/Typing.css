@@ -12,7 +12,6 @@ body {
 p {
   background-color: #ffd573;
   border-radius: 15px;
-  box-shadow: 7px 7px #d29300;
 }
 
 button {
@@ -22,7 +21,6 @@ button {
 
 * {
   color: black;
-  text-shadow: 0 0 5px #0000006a;
 }
 
 #editable {

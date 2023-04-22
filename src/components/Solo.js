@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // import bootstrap
 
-const Bots = () => {
+const Solo = () => {
   const [time, setTime] = useState(0);
 
   const [reset, setReset] = useState(false);
@@ -23,43 +23,26 @@ const Bots = () => {
   const [isRunning, setIsRunning] = useState(0);
 
   const [colourList, setColourList] = useState([]);
-  const [botColourList, setBotColourList] = useState([]);
 
   const [mount] = useState(false);
 
-  const [showButtons, setShowButtons] = useState(true);
-  const [mode, setMode] = useState(0);
-  const [speed, setSpeed] = useState(0);
-
-  const [win, setWin] = useState(false);
-
-
-  const clickEasy = () => {
-    setMode(1);
-    setSpeed(220);
-  };
-
-  const clickMed = () => {
-    setMode(2);
-    setSpeed(120);
-  };
-
-  const clickHard = () => {
-    setMode(3);
-    setSpeed(80);
-  };
-
-  const clickBack = () => {
-    setMode(0);
-  };
-
-  useEffect(() => {
-    if (mode !== 0) {
-      setShowButtons(false);
-    } else {
-      setShowButtons(true);
-    }
-  }, [mode]);
+  const sentences = [
+    "Own a musket for home defense, since that's what the founding fathers intended.",
+    "The urgent care center was flooded with patients after the news of a new deadly virus was made public.",
+    "Everybody should read Chaucer to improve their everyday vocabulary.",
+    "I come from a tribe of head-hunters, so I will never need a shrink.",
+    "Gwen had her best sleep ever on her new bed of nails.",
+    "He stomped on his fruit loops and thus became a cereal killer.",
+    "I am counting my calories, yet I really want dessert.",
+    "She says she has the ability to hear the soundtrack of your life.",
+    "David proudly graduated from high school top of his class at age 97.",
+    "Homesickness became contagious in the young campers' cabin.",
+    "Each person who knows you has a different perception of who you are.",
+    "My biggest joy is roasting almonds while stalking prey.",
+    "After coating myself in vegetable oil, I found my success rate skyrocketed.",
+    "He wore the surgical mask in public not to keep from catching a virus, but to keep people away from him.",
+    "People generally approve of dogs eating cat food but not cats eating dog food.",
+  ];
 
 
   useEffect(() => {
@@ -79,24 +62,18 @@ const Bots = () => {
       setTyped('');
       setSplitToType(['']);
       setColourList([]);
-      setBotColourList([]);
       setIsRunning(0);
     }
   }, [reset]);
 
-
   const genText = () => {
     setGetText(true);
     setReset(false);
-  }
+  };
 
   const fetchData = async () => {
-    /*
-    const response = await fetch('/path/to/db');
-    const data = await response.json();
-    let textUwU = data.toType;
-    */
-    setToType('good morning children owo');
+    let num = Math.floor(Math.random() * (sentences.length));
+    setToType(sentences[num]);
   };
 
   useEffect(() => {
@@ -155,7 +132,6 @@ const Bots = () => {
   useEffect(() => {
     if (isRunning === 1 && splitToType !== null) {
       if (splitTyped.length > splitToType.length || splitToType[splitToType.length - 1] === splitTyped[splitTyped.length - 1]) {
-        setWin(true);
         stopTimer();
       }
     }
@@ -228,6 +204,7 @@ const Bots = () => {
     if (isRunning === 1) {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 10);
+        //console.log(displayText);
       }, 10);
     }
     return () => clearInterval(interval);
@@ -253,31 +230,6 @@ const Bots = () => {
     setWpm(((splitToType.length - wrongWords + 1) / (elapsed / 1000 / 60)).toFixed(2));
   };
 
-
-  const matchColourBot = (i) => {
-    if (i < botColourList.length) {
-      return { color: botColourList[i] };
-    }
-    return { color: '#2c2c2c' };
-  };
-
-  useEffect(() => {
-    let interval;
-    if (isRunning === 1) {
-      let l = botColourList.slice();
-      interval = setInterval(() => {
-        if (l.length <= toType.length) {
-          l.push('#26734d');
-          setBotColourList(l);
-        }
-        if (l.length === toType.length) {
-          stopTimer();
-        }
-      }, speed);
-    }
-    return () => clearInterval(interval);
-  }, [isRunning]);
-
   // document.addEventListener("DOMContentLoaded", function() {
   //   const editableDiv = document.getElementById('editable');
   //   editableDiv.innerHTML = "Type your text here.";
@@ -291,104 +243,63 @@ const Bots = () => {
 
   return (
     <div className="container">
-      {showButtons ? (
-        <div>
-          <button
-            className="btn btn-dark btn-block"
-            onClick={clickEasy}
-            style={{ padding: '10px 20px 10px 20px', borderRadius: '15px', marginRight: '10px', fontSize: '25px' }}
-          >
-            Easy
-          </button>
 
-          <button
-            className="btn btn-dark btn-block"
-            onClick={clickMed}
-            style={{ padding: '10px 20px 10px 20px', borderRadius: '15px', marginRight: '10px', fontSize: '25px' }}
-          >
-            Medium
-          </button>
+      {/* text+typebox / button for text */}
+      <div className="row">
+        {!showText ? (
+          <div style={{ padding: '20px' }}>
 
-          <button
-            className="btn btn-dark btn-block"
-            onClick={clickHard}
-            style={{ padding: '10px 20px 10px 20px', borderRadius: '15px', marginRight: '10px', fontSize: '25px' }}
-          >
-            Hard
-          </button>
+            {/* button to generate text: */}
+            <button
+              className="btn btn-dark btn-block"
+              onClick={genText}
+              style={{ padding: '10px 20px 10px 20px', borderRadius: '15px', fontSize: '25px' }}
+            >
+              Generate Text
+            </button>
+          </div>
+        ) : (
+          <div>
 
-          <div style={{ height: '20px' }}></div>
-        </div>
-      ) : (
-        <div>
-          {/* text+typebox / button for text */}
-          <div className="row">
-            {!showText ? (
-              <div style={{ padding: '20px' }}>
-
-                {/* button to generate text: */}
-                <button
-                  className="btn btn-dark btn-block"
-                  onClick={genText}
-                  style={{ padding: '10px 20px 10px 20px', borderRadius: '15px', fontSize: '25px' }}
-                >
-                  Generate Text
-                </button>
-
-              </div>
-            ) : (
-              <div>
-
-                <p style={{ padding: '15px', backgroundColor: '#ffc53e' }}>
-                  🤖:{' '}
-                  {toType.slice().split('').map((char, i) => (
-                    <span key={i} style={matchColourBot(i)}>
+            {/* text */}
+            <p style={{ padding: '15px' }}>
+              {displayText.map((word, i) => (
+                <span key={i}>
+                  {word.split('').map((char, j) => (
+                    <span key={j} style={matchColour(i, j)}>
                       {char}
                     </span>
                   ))}
-                </p>
+                  {' '}
+                </span>
+              ))}
+            </p>
 
-                {/* text */}
-                <p style={{ padding: '15px' }}>
-                  🧔‍♂️:{' '}
-                  {displayText.map((word, i) => (
-                    <span key={i}>
-                      {word.split('').map((char, j) => (
-                        <span key={j} style={matchColour(i, j)}>
-                          {char}
-                        </span>
-                      ))}
-                      {' '}
-                    </span>
-                  ))}
-                </p>
+            {/* <p style={{ padding: '0 0 10px 0' }}>{toType}</p> */}
 
-                {/* <p style={{ padding: '0 0 10px 0' }}>{toType}</p> */}
+            {/* textbox */}
+            <textarea
+              className="form-control"
+              id='texteh'
+              rows={10}
+              style={{ backgroundColor: "grey", border: "grey", height: '10px', boxShadow: '10px 10px #505050', borderRadius: '12px', opacity: '0.1' }}
+              placeholder=""
+              defaultValue={typed}
+              onInput={handleTextChange}
+            />
 
-                {/* textbox */}
-                <textarea
-                  className="form-control"
-                  id='texteh'
-                  rows={10}
-                  style={{ backgroundColor: "grey", border: "grey", height: '10px', boxShadow: '10px 10px #505050', borderRadius: '12px', opacity: '0.1' }}
-                  placeholder=""
-                  defaultValue={typed}
-                  onInput={handleTextChange}
-                />
-
-                {/* time */}
-                <h1 style={{ padding: '20px 0 15px 0' }}>
-                  time: {(time / 1000).toFixed(2)}s
-                </h1>
-              </div>
-            )}
+            {/* time */}
+            <h1 style={{ padding: '20px 0 15px 0' }}>
+              time: {(time / 1000).toFixed(2)}s
+            </h1>
           </div>
+        )}
+      </div>
 
+      { // <div id="editable" contentEditable="true"></div>
+      }
 
-          { // <div id="editable" contentEditable="true"></div>
-          }
-
-          {/* <div className="row" style={{ marginTop: '20px' }}>
+      {/* <div className="row" style={{ marginTop: '20px' }}>
         <div className="col-12">
           <p className="text-center">
             {typed}
@@ -396,46 +307,31 @@ const Bots = () => {
         </div>
       </div> */}
 
-          {isRunning === 2 ? (
-            <div>
-              <h1>
-                wpm: {wpm}
-              </h1>
-              <h1 style={{ padding: '15px 0 15px 0' }}>
-                wrong words: {wrongWords}
+      {isRunning === 2 ? (
+        <div>
+          <h1>
+            wpm: {wpm}
+          </h1>
+          <h1 style={{ padding: '15px 0 15px 0' }}>
+            wrong words: {wrongWords}
+          </h1>
+          {/* button to reset: */}
+          <button
+            className="btn btn-dark btn-block"
+            onClick={close}
+            style={{ padding: '10px 20px 10px 20px', borderRadius: '15px' }}
+          >
+            Reset
+          </button>
 
-                <div style={{ padding: '15px 0 15px 0' }}>
-                  {win ? (
-                    <div>
-                      You Win!
-                    </div>
-                  ) : (
-                    <div>
-                      You Lose :(
-                    </div>
-                  )}
-                </div>
-
-              </h1>
-              {/* button to reset: */}
-              <button
-                className="btn btn-dark btn-block"
-                onClick={close}
-                style={{ padding: '10px 20px 10px 20px', borderRadius: '15px' }}
-              >
-                Reset
-              </button>
-
-              <div style={{ height: '20px' }}></div>
-            </div>
-          ) : (
-            ''
-          )}
+          <div style={{ height: '20px' }}></div>
         </div>
+      ) : (
+        ''
       )}
 
     </div>
   );
 };
 
-export default Bots;
+export default Solo;

@@ -1,7 +1,6 @@
 import './App.css';
-import Typing from './Typing.js';
-import Typing2 from './Typing2.js';
-import Typing3 from './Typing3.js';
+import Homepage from './components/Homepage.js';
+import './Typing.css'; // import css
 
 // config to connect to firebase
 import firebase from 'firebase/compat/app';
@@ -45,7 +44,7 @@ function App() {
       <header className="App-header" style={{ backgroundColor: "#ffce47", borderRadius: '0' }}>
         {user ? (
           <div>
-            <Typing3 />
+            <Homepage />
             <div style={{ height: 50 }} />
             <SignOut />
           </div>
